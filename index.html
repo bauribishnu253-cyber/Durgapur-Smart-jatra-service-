@@ -298,6 +298,19 @@ $("confirmBtn").onclick=()=>{
   const time=$("time").value;
   const dist=parseFloat($("distance").value);
   const txn=sanitize($("txn").value);
+    // এই অংশটুকু ২৯৯ নম্বর লাইনের নিচে যোগ করুন
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(pos => {
+            const gps = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+            const msg = `*NEW BOOKING*%0A👤 Name: ${name}%0A📞 Ph: ${mobile}%0A📍 Dest: ${dest}%0A👥 Pax: ${count}%0A📅 Date: ${date}%0A⏰ Time: ${time}%0A🛣️ Dist: ${dist}km%0A💳 TXN: ${txn}%0A📍 Location: ${gps}`;
+            window.location.href = `https://wa.me/917478578232?text=${msg}`;
+        }, () => {
+            alert("Please enable GPS for location!");
+        });
+    } else {
+        alert("GPS not supported!");
+    }
+}; // এই ব্র্যাকেটটি দিয়ে ফাংশন শেষ হবে
 
   if(!name||!mobile||!dest||!count||!date||!time||!txn){
     alert("All fields required");
@@ -346,5 +359,6 @@ Note: Customer confirmed distance above 4.5 km`;
 </body>
 
 </html>
+
 
 
