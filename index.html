@@ -237,18 +237,43 @@ $("payBtn").onclick = ()=>{
 
 /* ================= POST PAYMENT MAP BUTTON ================= */
 $("mapBtn").onclick = ()=>{
-  navigator.geolocation.getCurrentPosition(pos=>{
-    const lat=pos.coords.latitude;
-    const lng=pos.coords.longitude;
+  function sendWhatsApp(gpsText){
 
-    const link=`https://maps.google.com/?q=${lat},${lng}`;
+  const text =
+`🚖 SMART JATRA BOOKING
+👤 Name: ${name}
+📞 Mobile: ${mobile}
+📍 Destination: ${dest}
+👥 Passengers: ${count}
+📅 Date: ${date}
+⏰ Time: ${time}
+📏 Distance: ${dist} km
+💳 Transaction ID: ${txn}
+📍 Location: ${gpsText}`;
 
-    const msg=encodeURIComponent(
-      "Booking Confirmed! Please guide me to the pickup stand. My Location: "+link
-    );
+  const encoded = encodeURIComponent(text);
 
-    window.open(`https://wa.me/919564681311?text=${msg}`);
-  });
+  window.location.href =
+    `https://wa.me/917478578232?text=${encoded}`;
+
+  lastSubmit = now;
+}
+
+/* Try GPS */
+if(navigator.geolocation){
+  navigator.geolocation.getCurrentPosition(
+    pos=>{
+      const gps =
+        `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`;
+      sendWhatsApp(gps);
+    },
+    ()=>{
+      sendWhatsApp("GPS permission denied");
+    }
+  );
+}else{
+  sendWhatsApp("GPS not supported");
+}
 };
 
 
@@ -321,4 +346,5 @@ Note: Customer confirmed distance above 4.5 km`;
 </body>
 
 </html>
+
 
